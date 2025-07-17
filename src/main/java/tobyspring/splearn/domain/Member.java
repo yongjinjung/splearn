@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import static org.springframework.util.Assert.state;
 
@@ -11,20 +12,28 @@ import static org.springframework.util.Assert.state;
 @ToString
 public class Member {
 
-    String email;
+    private Email email;
 
-    String nickname;
+    private String nickname;
 
-    String passwordHash;
+    private String passwordHash;
 
-    MemberStatus status;
+    private MemberStatus status;
 
-    public Member(String email, String nickname, String passwordHash) {
-        this.email = Objects.requireNonNull(email);
-        this.nickname = Objects.requireNonNull(nickname);
-        this.passwordHash = Objects.requireNonNull(passwordHash);
+    private Member(){
 
-        this.status = MemberStatus.PENDING;
+    }
+
+    public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder){
+        Member member = new Member();
+
+        member.email = new Email(createRequest.email());
+        member.nickname = Objects.requireNonNull(createRequest.nickname());
+        member.passwordHash = Objects.requireNonNull(passwordEncoder.encode(createRequest.password()));
+
+        member.status = MemberStatus.PENDING;
+
+        return member;
     }
 
     public void activate() {
@@ -37,5 +46,22 @@ public class Member {
         state(status == MemberStatus.ACTIVE, "ACTIVE 상태가 아닙니다.");
 
         this.status = MemberStatus.DEACTIVATED;
+    }
+
+    public boolean verifyPassword(String password, PasswordEncoder passwordEncoder) {
+
+        return passwordEncoder.matches(password, this.passwordHash);
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = Objects.requireNonNull(nickname);
+    }
+
+    public void changePassword(String password, PasswordEncoder passwordEncoder) {
+        this.passwordHash = passwordEncoder.encode(Objects.requireNonNull(password));
+    }
+
+    public boolean isActive() {
+        return this.status == MemberStatus.ACTIVE;
     }
 }
