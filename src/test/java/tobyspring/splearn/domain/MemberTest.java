@@ -11,7 +11,7 @@ class MemberTest {
 
     Member member;
     PasswordEncoder passwordEncoder;
-    MemberCreateRequest createRequest;
+    MemberRegisterRequest createRequest;
 
     @BeforeEach
     void setUp() {
@@ -26,13 +26,13 @@ class MemberTest {
                 return encode(password).equals(passwordHash);
             }
         };
-        createRequest = new MemberCreateRequest("toby@splearn.app", "Toby", "secret");
-        member = Member.create(createRequest, passwordEncoder);
+        createRequest = new MemberRegisterRequest("toby@splearn.app", "Toby", "secret");
+        member = Member.register(createRequest, passwordEncoder);
     }
 
     @Test
     @DisplayName("회원 생성")
-    void createMember(){
+    void registerMember(){
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }
 
@@ -121,9 +121,9 @@ class MemberTest {
     @DisplayName("이메일 검증")
     void invalidEmail() {
         assertThatThrownBy(() -> {
-            Member.create(new MemberCreateRequest("jyj1641", "yongjin", "secret"), passwordEncoder);
+            Member.register(new MemberRegisterRequest("jyj1641", "yongjin", "secret"), passwordEncoder);
         }).isInstanceOf(IllegalArgumentException.class);
 
-        Member.create(new MemberCreateRequest("jyj1641@gmail.com", "yongjin", "secret"), passwordEncoder);
+        Member.register(new MemberRegisterRequest("jyj1641@gmail.com", "yongjin", "secret"), passwordEncoder);
     }
 }

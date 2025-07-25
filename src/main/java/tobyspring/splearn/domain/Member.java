@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 import static org.springframework.util.Assert.state;
 
@@ -24,7 +23,7 @@ public class Member {
 
     }
 
-    public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder){
+    public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder){
         Member member = new Member();
 
         member.email = new Email(createRequest.email());
