@@ -77,7 +77,7 @@ class MemberTest {
     @Test
     @DisplayName("닉네임을 변경한다.")
     void changeNickname() {
-        assertThat(member.getNickname()).isEqualTo("Toby");
+        assertThat(member.getNickname()).isEqualTo("yongjin");
         member.changeNickname("DragonJin");
         assertThat(member.getNickname()).isEqualTo("DragonJin");
 
