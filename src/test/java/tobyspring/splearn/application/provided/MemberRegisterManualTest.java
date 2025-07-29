@@ -4,7 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
-import tobyspring.splearn.application.MemberService;
+import tobyspring.splearn.application.MemberModifyService;
+import tobyspring.splearn.application.MemberQueryService;
 import tobyspring.splearn.application.required.EmailSender;
 import tobyspring.splearn.application.required.MemberRepository;
 import tobyspring.splearn.domain.Email;
@@ -25,8 +26,8 @@ class MemberRegisterManualTest {
     @Test
     @DisplayName("회원 생성 Stub")
     void registerTestStub() {
-        MemberRegister register = new MemberService(
-                new MemberRepositoryStub(), new EmailSenderStub(), MemberFixture.createPasswordEncoder()
+        MemberRegister register = new MemberModifyService(
+                new MemberQueryService(new MemberRepositoryStub()), new MemberRepositoryStub(), new EmailSenderStub(), MemberFixture.createPasswordEncoder()
         );
 
         Member member = register.register(MemberFixture.createMemberRegisterReques());
@@ -39,8 +40,8 @@ class MemberRegisterManualTest {
     @DisplayName("회원 생성 Mock")
     void registerTestMock() {
         EmailSenderMock emailSender = new EmailSenderMock();
-        MemberRegister register = new MemberService(
-                new MemberRepositoryStub(), emailSender, MemberFixture.createPasswordEncoder()
+        MemberRegister register = new MemberModifyService(
+                new MemberQueryService(new MemberRepositoryStub()), new MemberRepositoryStub(), emailSender, MemberFixture.createPasswordEncoder()
         );
 
         Member member = register.register(MemberFixture.createMemberRegisterReques());
@@ -55,8 +56,8 @@ class MemberRegisterManualTest {
     @DisplayName("회원 생성 Mockito")
     void registerTestMockito() {
         EmailSender emailSender = Mockito.mock(EmailSender.class);
-        MemberRegister register = new MemberService(
-                new MemberRepositoryStub(), emailSender, MemberFixture.createPasswordEncoder()
+        MemberRegister register = new MemberModifyService(
+                new MemberQueryService(new MemberRepositoryStub()), new MemberRepositoryStub(), emailSender, MemberFixture.createPasswordEncoder()
         );
 
         Member member = register.register(MemberFixture.createMemberRegisterReques());
@@ -68,6 +69,7 @@ class MemberRegisterManualTest {
 
     }
 
+
     static class MemberRepositoryStub implements MemberRepository {
 
         @Override
@@ -78,6 +80,11 @@ class MemberRegisterManualTest {
 
         @Override
         public Optional<Member> findByEmail(Email email) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<Member> findById(Long memberId) {
             return Optional.empty();
         }
 

@@ -1,4 +1,4 @@
 @NonNullApi
-package tobyspring.splearn.domain;
+package tobyspring.splearn.application;
 
 import org.springframework.lang.NonNullApi;

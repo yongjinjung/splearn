@@ -70,8 +70,8 @@ class MemberTest {
     @Test
     @DisplayName("비밀번호를 검증한다.")
     void verifyPassword() {
-        assertThat(member.verifyPassword("secret", passwordEncoder)).isTrue();
-        assertThat(member.verifyPassword("hello", passwordEncoder)).isFalse();
+        assertThat(member.verifyPassword("verysecret", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword("veryhellosecret", passwordEncoder)).isFalse();
     }
 
     @Test
