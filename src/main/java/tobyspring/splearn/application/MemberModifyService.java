@@ -11,8 +11,6 @@ import tobyspring.splearn.application.required.EmailSender;
 import tobyspring.splearn.application.required.MemberRepository;
 import tobyspring.splearn.domain.*;
 
-import java.util.function.Supplier;
-
 @Service
 @Transactional
 @Validated
