@@ -13,24 +13,29 @@ import java.util.Objects;
 import static org.springframework.util.Assert.state;
 
 @Entity
+@Table(name = "MEMBER", uniqueConstraints = @UniqueConstraint(name = "UK_MEMBER_EMAIL_ADDRESS", columnNames = "email_address"))
 @Getter
 @ToString
 @NaturalIdCache
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends AbstractEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    /** 닉네임 **/
     @Embedded
     @NaturalId
     private Email email;
 
+    /** 닉네임 **/
+    @Column(length = 100, nullable = false)
     private String nickname;
 
+    /** 비밀번호 **/
+    @Column(length = 200, nullable = false)
     private String passwordHash;
 
+    /** 회원 상태 **/
     @Enumerated(EnumType.STRING)
+    @Column(length = 50, nullable = false)
     private MemberStatus status;
 
     public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder){
