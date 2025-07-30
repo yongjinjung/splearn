@@ -27,6 +27,7 @@
             </basic>
             <basic name="status">
                 <column name="status" nullable="false" length="50"/>
+                <enumerated>STRING</enumerated>
             </basic>
             <embedded name="email">
             </embedded>
