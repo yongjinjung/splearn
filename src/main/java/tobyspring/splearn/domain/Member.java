@@ -32,6 +32,9 @@ public class Member extends AbstractEntity {
     /** 회원 상태 **/
     private MemberStatus status;
 
+    /** 회원 상세 **/
+    private MemberDetail memberDetail;
+
     public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder){
         Member member = new Member();
 
