@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.StdIo;
 import org.junitpioneer.jupiter.StdOut;
-import tobyspring.splearn.domain.Email;
+import tobyspring.splearn.domain.shared.Email;
 
 class DummyEmailSenderTest {
     @Test
