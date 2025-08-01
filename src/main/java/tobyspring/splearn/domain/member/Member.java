@@ -35,7 +35,6 @@ public class Member extends AbstractEntity {
     private MemberStatus status;
 
     /** 회원 상세 **/
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private MemberDetail detail;
 
     public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder){
