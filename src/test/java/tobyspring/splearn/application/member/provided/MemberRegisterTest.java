@@ -27,7 +27,6 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
 
         assertThat(member.getId()).isNotNull();
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
-
     }
 
     @Test
@@ -40,15 +39,44 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
     @Test
     @DisplayName("회원 등록 활성화")
     void activate() {
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterReques());
-        entityManager.flush();
-        entityManager.clear();
+        Member member = registerMember();
 
         Member activate = memberRegister.activate(member.getId());
         entityManager.flush();
 
         assertThat(activate.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(activate.getDetail().getActivatedAt()).isNotNull();
     }
+
+    @Test
+    @DisplayName("회원 탈퇴")
+    void deactivate() {
+        Member member = registerMember();
+
+        memberRegister.activate(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegister.deactivate(member.getId());
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("회원 정보 업데이트")
+    void updateInfo() {
+        Member member = registerMember();
+
+        memberRegister.activate(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        var request = new MemberInfoUpdateRequest("yongjin", "toby100", "자기소개");
+        member = memberRegister.updateInfo(member.getId(), request);
+        assertThat(member.getDetail().getProfile().address()).isEqualTo("toby100");
+    }
+
 
     @Test
     @DisplayName("회원 요청 validation")
@@ -63,4 +91,10 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
         assertThatThrownBy(()-> memberRegister.register(invalid)).isInstanceOf(ConstraintViolationException.class);
     }
 
+    private Member registerMember() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterReques());
+        entityManager.flush();
+        entityManager.clear();
+        return member;
+    }
 }
