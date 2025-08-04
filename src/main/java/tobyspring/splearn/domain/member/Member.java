@@ -77,6 +77,8 @@ public class Member extends AbstractEntity {
     }
 
     public void updateInfo(MemberInfoUpdateRequest updateRequest){
+        state(status == MemberStatus.ACTIVE, "활성화된 회원만 정보 수정이 가능합니다.");
+
         this.nickname = Objects.requireNonNull(updateRequest.nickname());
 
         this.detail.updateInfo(updateRequest);

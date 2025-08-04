@@ -79,6 +79,7 @@ class MemberTest {
     @DisplayName("비밀번호를 검증한다.")
     void verifyPassword() {
         assertThat(member.verifyPassword("verysecret", passwordEncoder)).isTrue();
+
         assertThat(member.verifyPassword("veryhellosecret", passwordEncoder)).isFalse();
     }
 
@@ -86,7 +87,9 @@ class MemberTest {
     @DisplayName("닉네임을 변경한다.")
     void changeNickname() {
         assertThat(member.getNickname()).isEqualTo("yongjin");
+
         member.changeNickname("DragonJin");
+
         assertThat(member.getNickname()).isEqualTo("DragonJin");
 
     }
@@ -95,6 +98,7 @@ class MemberTest {
     @DisplayName("비밀번호를 변경한다.")
     void changePassword() {
         member.changePassword("secret2", passwordEncoder);
+
         assertThat(member.verifyPassword("secret2", passwordEncoder)).isTrue();
     }
 
@@ -136,5 +140,15 @@ class MemberTest {
         assertThat(member.getDetail().getProfile().address()).isEqualTo(request.profileAddress());
         assertThat(member.getDetail().getIntroduction()).isEqualTo(request.introduction());
     }
+    
+   @Test
+   @DisplayName("회원 정보 업데이트 실패")
+   void updateInfoFail() {
+       assertThatThrownBy(()-> {
+           var request = new MemberInfoUpdateRequest("Leo", "toby100", "자기소개");
+           member.updateInfo(request);
+       })
+       .isInstanceOf(IllegalStateException.class);
+   } 
 
 }
