@@ -49,15 +49,23 @@
             </unique-constraint>
         </table>
         <attributes>
-            <embedded name="profile"/>
             <basic name="introduction">
                 <column column-definition="TEXT"/>
             </basic>
+
             <basic name="registeredAt">
-                <column nullable="false"/>
+                <column name="registered_at" nullable="false"/>
             </basic>
-            <basic name="activatedAt"/>
-            <basic name="deactivatedAt"/>
+
+            <basic name="activatedAt">
+                <column name="activated_at" />
+            </basic>
+
+            <basic name="deactivatedAt">
+                <column name="deactivated_at" />
+            </basic>
+
+            <embedded name="profile"/>
         </attributes>
     </entity>
 
