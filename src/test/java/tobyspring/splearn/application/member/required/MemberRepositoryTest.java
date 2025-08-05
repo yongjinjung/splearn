@@ -25,7 +25,7 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("회원등록")
     void createMember() {
-        Member member = Member.register(MemberFixture.createMemberRegisterReques(), MemberFixture.createPasswordEncoder());
+        Member member = Member.register(MemberFixture.createMemberRegisterRequest(), MemberFixture.createPasswordEncoder());
         assertThat(member.getId()).isNull();
         memberRepository.save(member);
         assertThat(member.getId()).isNotNull();
@@ -40,10 +40,10 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("회원 이메일 정합성 검사")
     void duplicateEmailFail() {
-        Member member = Member.register(MemberFixture.createMemberRegisterReques(), MemberFixture.createPasswordEncoder());
+        Member member = Member.register(MemberFixture.createMemberRegisterRequest(), MemberFixture.createPasswordEncoder());
         memberRepository.save(member);
 
-        Member member2 = Member.register(MemberFixture.createMemberRegisterReques(), MemberFixture.createPasswordEncoder());
+        Member member2 = Member.register(MemberFixture.createMemberRegisterRequest(), MemberFixture.createPasswordEncoder());
         assertThatThrownBy(()->memberRepository.save(member2)).isInstanceOf(DataIntegrityViolationException.class);
     }
 }

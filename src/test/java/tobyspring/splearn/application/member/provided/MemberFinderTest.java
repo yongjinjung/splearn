@@ -21,7 +21,7 @@ record MemberFinderTest(MemberRegister memberRegister, MemberFinder memberFinder
     @Test
     @DisplayName("회원 조회")
     void memberFind() {
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterReques());
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
         entityManager.flush();
         entityManager.clear();
 
