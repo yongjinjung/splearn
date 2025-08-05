@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static tobyspring.splearn.domain.member.MemberFixture.*;
+import static tobyspring.splearn.domain.member.MemberFixture.createMemberRegisterRequest;
+import static tobyspring.splearn.domain.member.MemberFixture.createPasswordEncoder;
 
 class MemberTest {
 
@@ -16,7 +17,7 @@ class MemberTest {
     @BeforeEach
     void setUp() {
         this.passwordEncoder = createPasswordEncoder();
-        member = Member.register(createMemberRegisterReques(), passwordEncoder);
+        member = Member.register(MemberFixture.createMemberRegisterRequest(), passwordEncoder);
     }
 
     @Test
