@@ -6,7 +6,7 @@ public class MemberFixture {
         return new MemberRegisterRequest(invalidEmail, "yongjin", "verysecret");
     }
 
-    public static MemberRegisterRequest createMemberRegisterReques() {
+    public static MemberRegisterRequest createMemberRegisterRequest() {
         return createMemberRegisterRequest("toby@splearn.app");
     }
 
