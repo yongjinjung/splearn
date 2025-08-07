@@ -1,0 +1,60 @@
+package tobyspring.splearn.adapter.webapi;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
+import tobyspring.splearn.application.member.provided.MemberRegister;
+import tobyspring.splearn.domain.member.Member;
+import tobyspring.splearn.domain.member.MemberFixture;
+import tobyspring.splearn.domain.member.MemberRegisterRequest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@WebMvcTest(MemberApi.class)
+@RequiredArgsConstructor
+class MemberApiWebMvcTest {
+
+    final MockMvcTester mvcTester;
+    final ObjectMapper objectMapper;
+
+    @MockitoBean
+    MemberRegister memberRegister;
+
+
+    @Test
+    @DisplayName("회원등록 api")
+    void register() throws JsonProcessingException {
+        Member member = MemberFixture.createMember(1L);
+        Mockito.when(memberRegister.register(Mockito.any())).thenReturn(member);
+
+        MemberRegisterRequest request = MemberFixture.createMemberRegisterRequest();
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        assertThat(mvcTester.post().uri("/api/members").contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .hasStatusOk()
+                .bodyJson()
+                .extractingPath("$.memberId").asNumber().isEqualTo(1);
+
+        Mockito.verify(memberRegister).register(request);
+
+    }
+
+    @Test
+    @DisplayName("회원등록 api 400")
+    void registerFail() throws JsonProcessingException {
+        MemberRegisterRequest request = MemberFixture.createMemberRegisterRequest("invalid email");
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        assertThat(mvcTester.post().uri("/api/members").contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .hasStatus(HttpStatus.BAD_REQUEST);
+    }
+
+}
